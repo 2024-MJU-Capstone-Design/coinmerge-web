@@ -70,7 +70,7 @@ const Header = () => {
                 </Link>
               </li>
             </ul>
-            {!user && <button className="btn btn-warning">로그인 하기</button>}
+            {!user && <Link href="/signin" className="btn btn-warning">로그인 하기</Link>}
           </div>
         </div>
       </div>
