@@ -10,7 +10,7 @@ const Header = () => {
   const [user, setUser] = useState(false);
 
   return (
-    <div className="sticky backdrop-blur-lg top-0 border-b-[0.5px] border-b-slate-800 z-100">
+    <div className="sticky z-10 backdrop-blur-lg top-0 border-b-[0.5px] border-b-slate-800 z-100">
       <div className="m-auto max-w-[1400px] w-full flex flex-row gap-2 items-center justify-between p-2">
         <div className="flex items-center">
           <Link
