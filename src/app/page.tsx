@@ -5,8 +5,8 @@ import coinAnimation from "../assets/lotties/coins.json";
 
 const Home = () => {
   return (
-    <div className="h-[calc(100vh-69px)] flex flex-col justify-between py-32">
-      <section className="flex items-end justify-between">
+    <div className="h-[calc(100vh-69px)] flex flex-col justify-between py-24">
+      <section className="flex items-end justify-between overflow-visible">
         <pre className="font-bold text-[32px] whitespace-pre">
           코인 머지와 함께,{"\n"}
           당신의 암호화폐 자산을{"\n"}
@@ -16,15 +16,11 @@ const Home = () => {
           </Fade>
         </pre>
         <Lottie
-          className="h-[700px] transform-none"
-          style={{
-            transform: "none",
-          }}
-          rendererSettings={{ hideOnTransparent: true }}
+          className="h-[500px]"
           animationData={coinAnimation}
         />
       </section>
-      <div className="stats shadow w-full mt-5">
+      <div className="stats shadow w-full mt-5 overflow-visible">
         <div className="stat">
           <div className="stat-title">지원 거래소</div>
           <Fade delay={1000}>
@@ -60,7 +56,7 @@ const Home = () => {
           <Fade delay={2500}>
             <div className="stat-value text-green-400">86%</div>
           </Fade>
-          <div className="stat-title">
+          <div className="stat-desc">
             의 유저들이 서비스에 만족하고 있습니다.
           </div>
         </div>

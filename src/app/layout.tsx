@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${pretendard.className}`}>
         <Header />
-        <div className="max-w-[1400px] h-[calc(100vh-69px)] w-full m-auto">{children}</div>
+        <div className="max-w-[1400px] min-h-[calc(100vh-69px)] w-full m-auto">{children}</div>
         <Footer />
       </body>
     </html>
