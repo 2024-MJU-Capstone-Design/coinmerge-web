@@ -9,6 +9,15 @@ const config: Config = {
   plugins: [require("daisyui")],
   daisyui: {
     themes: ["dark"],
-  }
+  },
+  theme: {
+    extend: {
+      colors: {
+        deposit: "#35DA9E",
+        withdraw: "#f93535",
+        swap: "#3F87F4",
+      },
+    },
+  },
 };
 export default config;
