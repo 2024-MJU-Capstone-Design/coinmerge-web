@@ -26,7 +26,7 @@ const Layout = ({ children }: PropsWithChildren) => {
           <li>
             <Link href="/portfolio/analysis">
               <FaRobot />
-              AI 분석
+              코인머지 AI
               <span className="badge badge-sm badge-warning">NEW</span>
             </Link>
           </li>
@@ -58,9 +58,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         <section className="flex flex-col w-56 bg-base-200 rounded-box p-4 gap-2">
           <div>
             <p className="font-light text-gray-300 text-[12px]">조회 수</p>
-            <p className="font-light text-[12px]">
-              2312 회
-            </p>
+            <p className="font-light text-[12px]">2312 회</p>
           </div>
           <div>
             <p className="font-light text-gray-300 text-[12px]">가입 일</p>
@@ -71,7 +69,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         </section>
       </div>
 
-      <div className="bg-base-200 w-full rounded-box p-4 min-h-[calc(100vh-120px)]">
+      <div className="bg-base-200 w-full rounded-box p-4  h-[calc(100vh-120px)] flex flex-col overflow-y-scroll">
         {children}
       </div>
     </div>
