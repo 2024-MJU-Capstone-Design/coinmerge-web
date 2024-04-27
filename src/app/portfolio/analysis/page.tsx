@@ -1,9 +1,6 @@
 "use client";
 
 import { FaRobot } from "react-icons/fa";
-import { GrTransaction } from "react-icons/gr";
-import NewsAdvisorSection from "./components/NewsAdvisorSection";
-import TokenAdvisorSection from "./components/TokenAdvisorSection";
 import { KeyboardEventHandler, useState } from "react";
 
 interface IMessage {
