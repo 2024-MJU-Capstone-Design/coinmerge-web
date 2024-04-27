@@ -54,6 +54,12 @@ const AI = () => {
           );
         })}
       </section>
+      <section className="flex gap-4 mb-4">
+        <button className="btn btn-xs btn-outline btn-success">어떤 토큰에 투자하는게 좋을까?</button>
+        <button className="btn btn-xs btn-outline btn-primary">내 토큰들은 가격이 어떻게 변할까?</button>
+        <button className="btn btn-xs btn-outline btn-info">내 토큰과 관련한 소식을 알려줘!</button>
+        <button className="btn btn-xs btn-outline btn-secondary">암호화폐 소식을 알려줘!</button>
+      </section>
       <section className="flex gap-2">
         <input
           type="text"
