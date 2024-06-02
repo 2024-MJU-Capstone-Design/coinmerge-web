@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import "./globals.css";
-import Header from "./components/header";
+import Header from "./components/Header";
 import localFont from "next/font/local";
-import Footer from "./components/footer";
+import Footer from "./components/Footer";
+import GlobalModal from "./components/GlobalModal";
+import { useEffect } from "react";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
@@ -23,9 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretendard.className}`}>
-        <Header />
-        <div className="max-w-[1400px] min-h-[calc(100vh-69px)] w-full m-auto">{children}</div>
-        <Footer />
+          <Header />
+          <div className="max-w-[1400px] min-h-[calc(100vh-69px)] w-full m-auto">
+            {children}
+          </div>
+          <Footer />
+          <GlobalModal />
       </body>
     </html>
   );
