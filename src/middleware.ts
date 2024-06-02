@@ -10,7 +10,6 @@ export async function middleware(request: NextRequest) {
   const url = nextUrl.clone();
   const sessionCookie = cookies.get("JSESSIONID");
   const { validUser } = await checkAuth(`${sessionCookie?.name}=${sessionCookie?.value}`);
-  console.log(validUser);
 
   if (AUTH_PAGES.some((page) => nextUrl.pathname.startsWith(page))) {
     if (!validUser) {

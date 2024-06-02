@@ -66,7 +66,6 @@ export const useUserStore = create<UserState & UserAction>((set) => ({
       exchangeConnectionsLoading: true,
     });
     const exchangeConnections = await getExchangeConnections();
-    console.log(exchangeConnections);
 
     set({
       exchangeConnections,

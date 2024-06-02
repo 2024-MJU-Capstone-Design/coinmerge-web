@@ -201,7 +201,6 @@ const Transaction = () => {
               </thead>
               <tbody>
                 {item.values.map((event, index) => {
-                  console.log(event.currentTokenPrice);
                   return (
                     <tr key={`${item}-${index}`}>
                       <td className="flex items-center gap-2">
