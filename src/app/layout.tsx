@@ -4,8 +4,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./globals.css";
 import localFont from "next/font/local";
 import GlobalModal from "./components/GlobalModal";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
