@@ -6,7 +6,7 @@ import { FiTrello } from "react-icons/fi";
 import coinMergeImage from "../../assets/images/coinMerge.png";
 import { useEffect } from "react";
 import { useUserStore } from "@/stores/userStore";
-import { getProfile, logout } from "@/modules/apis";
+import { logout } from "@/modules/apis";
 import { DEFAULT_USER_PROFILE_URI } from "@/modules/constants";
 import { useRouter } from "next/navigation";
 
