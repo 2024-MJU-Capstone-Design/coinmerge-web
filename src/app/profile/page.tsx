@@ -1,12 +1,12 @@
 "use client";
 
-import SignUpForm from "./components/SignUpForm";
+import ProfileUpdateForm from "./components/ProfileUpdateForm";
 
 const SignUp = () => {
   return (
     <div className="flex flex-col items-center justify-center h-full">
-      <h1 className="font-bold text-[32px] mb-8">회원가입</h1>
-      <SignUpForm />
+      <h1 className="font-bold text-[32px] mb-8">프로필 수정</h1>
+      <ProfileUpdateForm />
     </div>
   );
 };
