@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { checkAuth } from "./modules/apis";
-import { useUserStore } from "./stores/userStore";
 
 const AUTH_PAGES = ["/portfolio", "/leaderboard", "/profile"];
 
