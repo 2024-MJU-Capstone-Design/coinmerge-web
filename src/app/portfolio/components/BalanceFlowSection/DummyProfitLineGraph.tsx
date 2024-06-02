@@ -2,51 +2,44 @@
 
 import CustomAxisTick from "@/app/components/CustomAxisTick";
 import { numberWithCommas } from "@/modules/helpers";
-import { useAppStore } from "@/stores/appStore";
-import { useUserStore } from "@/stores/userStore";
 import dayjs from "dayjs";
 import React, { useState } from "react";
 import { YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
-import { BITHUMB_DUMMY_DATA } from "../AssetSection/PortfolioPieGraph";
+import { faker } from "@faker-js/faker";
 
 enum GRAPH_TYPE {
   수익률,
   자산,
 }
 
-const ProfitLineGraph = () => {
-  const [graphType, setGraphType] = useState(GRAPH_TYPE.자산);
-  const assets = useUserStore((store) => store.assets);
-  const tokenPrices = useAppStore(state => state.tokenPrices);
-
-  const totalBithumbValue = BITHUMB_DUMMY_DATA.reduce((acc, cur) => {
-    const targetPrice = tokenPrices.find(
-      (price) => price.symbol == cur.token.id
-    );
-    return acc + cur.amount * Number(targetPrice?.lastPrice);
-  }, 0);
-
-
-  const snapshots = assets?.snapshots.map(snapshot => {
-    
-    return {
-      ...snapshot,
-      amount: Number(snapshot.amount) + totalBithumbValue
-    }
+const balanceData = faker.date
+  .betweens({
+    from: new Date("2024-01-01"),
+    to: new Date("2024-04-01"),
+    count: 100,
   })
-
-  const profitSnapshots = assets?.snapshots.map((snapshot, index) => {
-
+  .map((item) => {
     return {
-      ...snapshot,
-      amount:
-        index == 0
-          ? 0
-          : ((Number(snapshot.amount) + totalBithumbValue) /
-            (Number(assets.snapshots[index - 1].amount) + totalBithumbValue)).toFixed(2),
+      date: item,
+      amount: faker.number.int({ min: 100000, max: 110000 }),
     };
   });
 
+const profitRateData = faker.date
+  .betweens({
+    from: new Date("2024-01-01"),
+    to: new Date("2024-04-01"),
+    count: 100,
+  })
+  .map((item) => {
+    return {
+      date: item,
+      amount: faker.number.int({ min: -20.24, max: 202.16 }),
+    };
+  });
+
+const DummyProfitLineGraph = () => {
+  const [graphType, setGraphType] = useState(GRAPH_TYPE.자산);
   const onClickMenu = (newGraphType: GRAPH_TYPE) => {
     setGraphType(newGraphType);
   };
@@ -89,9 +82,7 @@ const ProfitLineGraph = () => {
       <ResponsiveContainer width="100%" height={280}>
         <AreaChart
           width={500}
-          data={
-            graphType === GRAPH_TYPE.자산 ? snapshots : profitSnapshots
-          }
+          data={graphType === GRAPH_TYPE.자산 ? balanceData : profitRateData}
           margin={{
             top: 5,
             right: 30,
@@ -122,7 +113,7 @@ const ProfitLineGraph = () => {
                 <div className="p-2 rounded-box flex flex-col bg-base-100 w-[200px]">
                   <ul className="flex flex-col items-center shadow-slate-900">
                     <p className="font-light text-gray-400 text-[12px]">
-                      {dayjs(tooltipPayload?.timeStamp).format("YYYY.MM.DD")}
+                      {dayjs(tooltipPayload?.date).format("YYYY.MM.DD")}
                     </p>
                     <p
                       className={`font-bold ${
@@ -133,7 +124,9 @@ const ProfitLineGraph = () => {
                     >
                       {graphType === GRAPH_TYPE.수익률
                         ? `${tooltipPayload?.amount}%`
-                        : `$${numberWithCommas(tooltipPayload?.amount?.toFixed(2))}`}
+                        : `$${numberWithCommas(
+                            tooltipPayload?.amount
+                          )}`}
                     </p>
                   </ul>
                 </div>
@@ -150,11 +143,13 @@ const ProfitLineGraph = () => {
             activeDot={false}
           />
         </AreaChart>
-        
       </ResponsiveContainer>
-      <p className="text-gray-400 text-[12px]">자산 그래프는 오전 9시 기준으로 기록 된 결과입니다. 현재 자산과 차이가 날 수 있습니다.</p>
+      <p className="text-gray-400 text-[12px]">
+        자산 그래프는 오전 9시 기준으로 기록 된 결과입니다. 현재 자산과 차이가
+        날 수 있습니다.
+      </p>
     </>
   );
 };
 
-export default ProfitLineGraph;
+export default DummyProfitLineGraph;
