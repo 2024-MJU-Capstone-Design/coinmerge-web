@@ -1,6 +1,7 @@
 "use client";
 
 import { TOKENS } from "@/modules/constants";
+import { Token } from "@/types/domain";
 import { faker } from "@faker-js/faker";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -12,6 +13,13 @@ const dummyTokens = [
   [TOKENS.USDT, TOKENS.USDC],
   [TOKENS.BTC, TOKENS.ETH, TOKENS.USDC, TOKENS.USDT],
 ];
+
+interface IProfile {
+  nickname: string;
+  profit: number;
+  profile: string;
+  tokens: Token[];
+}
 
 const dummys = Array.from({ length: 100 }, (v, i) => {
   return {
@@ -28,8 +36,8 @@ const dummys = Array.from({ length: 100 }, (v, i) => {
 
 const Leaderboard = () => {
   const router = useRouter();
-  const onClickItem = () => {
-    router.push("/portfolio");
+  const onClickItem = (item: IProfile) => {
+    router.push(`/portfolio/${100}?profile=${item.profile}&nickname=${item.nickname}`);
   };
 
   return (
@@ -57,7 +65,7 @@ const Leaderboard = () => {
               return (
                 <tr
                   className="hover:bg-base-100 cursor-pointer"
-                  onClick={onClickItem}
+                  onClick={() => onClickItem(item)}
                   key={`${item.nickname}-${index}`}
                 >
                   <th>{index + 1}</th>
