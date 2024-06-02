@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+
 import "./globals.css";
-import Header from "./components/header";
 import localFont from "next/font/local";
+import GlobalModal from "./components/GlobalModal";
+import Header from "./components/header";
 import Footer from "./components/footer";
 
 const pretendard = localFont({
@@ -23,9 +25,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretendard.className}`}>
-        <Header />
-        <div className="max-w-[1400px] min-h-[calc(100vh-69px)] w-full m-auto">{children}</div>
-        <Footer />
+          <Header />
+          <div className="max-w-[1400px] min-h-[calc(100vh-69px)] w-full m-auto">
+            {children}
+          </div>
+          <Footer />
+          <GlobalModal />
       </body>
     </html>
   );

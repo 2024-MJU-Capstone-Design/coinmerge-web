@@ -4,10 +4,29 @@ import Link from "next/link";
 import { FiTrello } from "react-icons/fi";
 
 import coinMergeImage from "../../assets/images/coinMerge.png";
-import { useState } from "react";
+import { useEffect } from "react";
+import { useUserStore } from "@/stores/userStore";
+import { logout } from "@/modules/apis";
+import { DEFAULT_USER_PROFILE_URI } from "@/modules/constants";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
-  const [user, setUser] = useState(false);
+  const [profile, loadProfile, setProfile] = useUserStore((state) => [
+    state.profile,
+    state.loadProfile,
+    state.setProfile,
+  ]);
+  const router = useRouter();
+
+  const onClickLogout = async () => {
+    await logout();
+    setProfile(null);
+    router.push("/");
+  };
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
 
   return (
     <div className="sticky z-10 backdrop-blur-lg top-0 border-b-[0.5px] border-b-slate-800 z-100">
@@ -23,7 +42,7 @@ const Header = () => {
         </div>
         <div>
           <div className="ml-4 flex flex-row gap-4 items-center">
-            <ul className="menu bg-base-200 lg:menu-horizontal rounded-box">
+            <ul className="menu bg-base-200 menu-horizontal rounded-box">
               <li>
                 <Link href={"/"}>
                   <svg
@@ -70,7 +89,33 @@ const Header = () => {
                 </Link>
               </li>
             </ul>
-            {!user && <Link href="/signin" className="btn btn-warning">로그인 하기</Link>}
+            {profile ? (
+              <div className="dropdown dropdown-hover dropdown-bottom dropdown-end z-30">
+                <div tabIndex={0} role="button" className="w-8 rounded">
+                  <Image
+                    width={40}
+                    height={40}
+                    src={profile.profileImage ?? DEFAULT_USER_PROFILE_URI}
+                    alt="user profile image"
+                  />
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content z-[1000] menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    <Link href="/profile">프로필 수정하기</Link>
+                  </li>
+                  <li>
+                    <button onClick={onClickLogout}>로그아웃 하기</button>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <Link href="/signin" className="btn btn-warning">
+                로그인 하기
+              </Link>
+            )}
           </div>
         </div>
       </div>

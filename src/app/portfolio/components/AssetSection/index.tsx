@@ -1,19 +1,24 @@
 "use client";
 
-import CountUp from "react-countup";
-import { GoGraph } from "react-icons/go";
 import { FaChartPie } from "react-icons/fa";
-import PortfolioPieGraph from "./PortfolioPieGraph";
+import PortfolioPieGraph, { BITHUMB_DUMMY_DATA } from "./PortfolioPieGraph";
 
-import USDCLogo from "../../../../assets/images/logos/USD Coin (USDC).png";
 import BTCLogo from "../../../../assets/images/logos/Bitcoin (BTC).png";
 import ETHLogo from "../../../../assets/images/logos/Ethereum (ETH).png";
-import USDTLogo from "../../../../assets/images/logos/Tether (USDT).png";
 import BinanceLogo from "../../../../assets/images/binance.png";
 import BithumbLogo from "../../../../assets/images/bithumb.png";
 import Image from "next/image";
+import { useUserStore } from "@/stores/userStore";
+import { useAppStore } from "@/stores/appStore";
 
 const AssetSection = () => {
+  const [assets] = useUserStore((state) => [state.assets]);
+  const tokenPrices = useAppStore((state) => state.tokenPrices);
+
+  const binanceAssets = assets?.assets.filter(
+    (asset) => (asset.exchange.nameKor = "바이낸스")
+  );
+
   return (
     <section className="p-4 rounded-box bg-base-100">
       <div className="flex items-center mb-5 gap-3">
@@ -39,23 +44,34 @@ const AssetSection = () => {
             </thead>
             <tbody>
               {/* row 1 */}
-              <tr>
-                <th>
-                  <Image width={20} alt="USDC" src={USDCLogo} />
-                </th>
-                <td>USDC</td>
-                <td>98.23 ($100.24)</td>
-                <td>7.16%</td>
-              </tr>
+              {binanceAssets?.map((asset) => {
+                const targetPrice = tokenPrices.find(
+                  (price) => price.symbol == asset.token.id
+                );
+
+                return (
+                  <tr key={`${asset.exchange.nameEng}-${asset.token.id}`}>
+                    <th>
+                      <Image
+                        width={20}
+                        height={20}
+                        alt={asset.token.id}
+                        src={asset.token.logo}
+                      />
+                    </th>
+                    <td>{asset.token.id}</td>
+                    <td>
+                      {asset.amount} ($
+                      {(
+                        Number(targetPrice?.lastPrice ?? 0) * asset.amount
+                      ).toFixed(2)}
+                      )
+                    </td>
+                    <td>{}</td>
+                  </tr>
+                );
+              })}
               {/* row 2 */}
-              <tr>
-                <th>
-                  <Image width={20} alt="USDT" src={USDTLogo} />
-                </th>
-                <td>USDT</td>
-                <td>199.24 ($200.24)</td>
-                <td>14.30%</td>
-              </tr>
             </tbody>
           </table>
         </div>
@@ -74,24 +90,32 @@ const AssetSection = () => {
               </tr>
             </thead>
             <tbody>
-              {/* row 1 */}
-              <tr>
-                <th>
-                  <Image width={20} alt="BTC" src={BTCLogo} />
-                </th>
-                <td>BTC</td>
-                <td>0.013 ($900.24)</td>
-                <td>64.27</td>
-              </tr>
-              {/* row 2 */}
-              <tr>
-                <th>
-                  <Image width={20} alt="ETH" src={ETHLogo} />
-                </th>
-                <td>ETH</td>
-                <td>0.060 ($200.24)</td>
-                <td>14.30%</td>
-              </tr>
+              {BITHUMB_DUMMY_DATA?.map((asset) => {
+                const targetPrice = tokenPrices.find(
+                  (price) => price.symbol == asset.token.id
+                );
+                return (
+                  <tr key={`${asset.exchange.nameEng}-${asset.token.id}`}>
+                    <th>
+                      <Image
+                        width={20}
+                        height={20}
+                        alt={asset.token.id}
+                        src={asset.token.logo}
+                      />
+                    </th>
+                    <td>{asset.token.id}</td>
+                    <td>
+                      {asset.amount} ($
+                      {(
+                        Number(targetPrice?.lastPrice ?? 0) * asset.amount
+                      ).toFixed(2)}
+                      )
+                    </td>
+                    <td>{}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

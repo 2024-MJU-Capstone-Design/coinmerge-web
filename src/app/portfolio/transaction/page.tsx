@@ -1,7 +1,7 @@
 "use client";
 
 import { EXCHANGES, TOKENS } from "@/modules/constants";
-import { faker } from "@faker-js/faker";
+import { de, faker } from "@faker-js/faker";
 import { useState } from "react";
 import { GrTransaction } from "react-icons/gr";
 import dayjs from "dayjs";
@@ -9,51 +9,15 @@ import dayjs from "dayjs";
 import { BiTransfer } from "react-icons/bi";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
-import { TransactionType } from "@/modules/types";
 import Image from "next/image";
-
-faker.seed(123);
-
-const CURRENT_USDT_PRICE = 1.01;
-const CURRENT_USDC_PRICE = 0.99;
-const CURRENT_ETH_PRICE = 3383.98;
-const CURRENT_BTC_PRICE = 69224.5;
-
-const data = faker.date
-  .betweens({
-    from: new Date("2024-01-01"),
-    to: new Date("2024-04-01"),
-    count: 100,
-  })
-  .map((item) => {
-    return {
-      timestamp: item,
-      events: [
-        {
-          exchange: EXCHANGES.binance,
-          type: faker.number.int(1000) % 2 == 1 ? "deposit" : "withdraw",
-          amount: faker.number.float({ min: 10.24, max: 100.25 }).toFixed(2),
-          token: TOKENS.USDC,
-          currentPrice: CURRENT_USDC_PRICE,
-        },
-        {
-          exchange: EXCHANGES.bithumb,
-          type: "swap",
-          token: TOKENS.USDC,
-          amount: faker.number.float({ min: 10.24, max: 100.25 }).toFixed(2),
-          swapAmount: faker.number
-            .float({ min: 0.0001, max: 0.006 })
-            .toFixed(2),
-          swapToken: TOKENS.BTC,
-          currentPrice: CURRENT_BTC_PRICE,
-        },
-      ],
-    };
-  });
+import { TokenType, TransactionType } from "@/types/domain";
+import { useUserStore } from "@/stores/userStore";
+import { useAppStore } from "@/stores/appStore";
+import { Exchange } from "@/types/api";
 
 type TransactionMenuType = "all" | "deposit" | "withdraw" | "swap";
 
-const TransactionItemConfig: { [key in TransactionType]: any } = {
+const TransactionItemConfig = {
   deposit: {
     color: "#35DA9E",
     icon: <FaArrowDown />,
@@ -71,8 +35,110 @@ const TransactionItemConfig: { [key in TransactionType]: any } = {
   },
 };
 
+interface TransactionEvent {
+  timestamp: string;
+  token: string;
+  swapToken: string | null;
+  currentTokenPrice: number;
+  currentSwapTokenPrice: number | null;
+  amount: string;
+  toAmount: string | null;
+  exchange: Exchange;
+  type: "deposit" | "withdraw" | "swap";
+}
+
+interface TransactionList {
+  [key: string]: TransactionEvent[];
+}
+
 const Transaction = () => {
   const [menu, setMenu] = useState<TransactionMenuType>("all");
+  const assets = useUserStore((state) => state.assets);
+  const tokenPrices = useAppStore((state) => state.tokenPrices);
+
+  let transactions: TransactionEvent[] =
+    assets?.depositAndWithdraws.map((depositAndWithdraw) => {
+      return {
+        timestamp: dayjs(depositAndWithdraw?.timeStamp ?? 0).format(
+          "YYYY.MM.DD"
+        ),
+        token: depositAndWithdraw.tokenId,
+        swapToken: null,
+        currentTokenPrice:
+          Number(
+            tokenPrices.find(
+              (token) => token.symbol == depositAndWithdraw.tokenId
+            )?.lastPrice
+          ) * Number(depositAndWithdraw.amount),
+        currentSwapTokenPrice: null,
+        type: depositAndWithdraw.type === 0 ? "deposit" : "withdraw",
+        amount: depositAndWithdraw.amount,
+        toAmount: null,
+        exchange: depositAndWithdraw.exchange,
+      };
+    }) ?? [];
+
+  transactions = transactions?.concat(
+    assets?.transactions.map((transaction) => {
+      return {
+        timestamp: dayjs(transaction?.timeStamp ?? 0).format("YYYY.MM.DD"),
+        token: transaction.fromTokenId,
+        swapToken: transaction.toTokenId,
+        currentTokenPrice:
+          Number(
+            tokenPrices.find((token) => token.symbol == transaction.fromTokenId)
+              ?.lastPrice
+          ) * Number(transaction.fromAmount),
+        currentSwapTokenPrice:
+          Number(
+            tokenPrices.find((token) => token.symbol == transaction.toTokenId)
+              ?.lastPrice
+          ) * Number(transaction.toAmount),
+        type: "swap",
+        amount: transaction.fromAmount,
+        toAmount: transaction.toAmount,
+        exchange: transaction.exchange,
+      };
+    }) ?? []
+  );
+
+  const transactionList: TransactionList = {};
+
+  transactions.filter(transaction => {
+    if(menu === "all") {
+      return transaction;
+    }else {
+      if(menu === "deposit"){
+        if(transaction.type == "deposit"){
+          return transaction;
+        }
+      }else if(menu === "withdraw") {
+        if(transaction.type === "withdraw"){
+          return transaction;
+        }
+      }else if(menu === "swap"){
+        if(transaction.type === "swap"){
+          return transaction;
+        }
+      }
+    }
+  }).forEach((transaction) => {
+    const timestamp = transaction.timestamp;
+    const transactionValue = transaction;
+
+    if (!transactionList[timestamp]) {
+      transactionList[timestamp] = [];
+    }
+
+    transactionList[timestamp].push(transactionValue);
+  });
+
+  const sortedTransactionList = Object.keys(transactionList)
+    .sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
+    .map((timestamp) => ({
+      timestamp: timestamp,
+      values: transactionList[timestamp],
+    }));
 
   const onClickMenu = (newMenu: TransactionMenuType) => {
     setMenu(newMenu);
@@ -119,25 +185,22 @@ const Transaction = () => {
           </li>
         </ul>
       </nav>
-      {data.map((item) => {
+      {sortedTransactionList.map((item) => {
         return (
-          <div key={item.timestamp.toString()} className="mb-4">
-            <p className="font-bold text-gray-300 mb-4">
-              {dayjs(item.timestamp).format("YYYY.MM.DD")}
-            </p>
-            <table className="table">
+          <div key={item.timestamp} className="mb-4">
+            <p className="font-bold text-gray-300 mb-4">{item.timestamp}</p>
+            <table className="table table-md table-auto">
               {/* head */}
               <thead>
                 <tr>
                   <th>Type</th>
                   <th>Assets</th>
                   <th>Current Value</th>
-                  <th>P/L</th>
                   <th>Exchange</th>
                 </tr>
               </thead>
               <tbody>
-                {item.events.map((event, index) => {
+                {item.values.map((event, index) => {
                   return (
                     <tr key={`${item}-${index}`}>
                       <td className="flex items-center gap-2">
@@ -162,51 +225,44 @@ const Transaction = () => {
                             <Image
                               width={16}
                               height={16}
-                              src={
-                                event.swapToken
-                                  ? event.swapToken.logo
-                                  : event.token.logo
-                              }
-                              alt={
-                                event.swapToken
-                                  ? event.swapToken.symbol
-                                  : event.token.symbol
-                              }
+                              src={TOKENS[event.token as TokenType]?.logo}
+                              alt={event.token}
                             />
                             <pre className="font-light text-sm">
                               {event.amount}
-                              <b className="text-xs">
-                                {" "}
-                                (${event.token.price * Number(event.amount)})
-                              </b>
                             </pre>
+                            {event.type == "swap" && (
+                              <>
+                                {
+                                  TransactionItemConfig[
+                                    event.type as TransactionType
+                                  ].icon
+                                }
+                                <Image
+                                  width={16}
+                                  height={16}
+                                  src={
+                                    TOKENS[event.swapToken as TokenType].logo
+                                  }
+                                  alt={event.swapToken ?? ""}
+                                />
+                                <pre className="font-light text-sm">
+                                  {event.toAmount}
+                                </pre>
+                              </>
+                            )}
                           </div>
                         </div>
                       </td>
                       <td className="font-light text-[12px]">
-                        $
-                        {(event.currentPrice * Number(event.amount)).toFixed(2)}
-                      </td>
-                      <td>
-                        <p
-                          className={`${
-                            event.currentPrice > event.token.price
-                              ? "text-deposit"
-                              : "text-withdraw"
-                          }`}
-                        >
-                          $
-                          {(
-                            event.currentPrice * Number(event.amount) -
-                            event.token.price * Number(event.amount)
-                          ).toFixed(2)}
-                        </p>
+                        ${Number(event.type === "swap" ? event.currentSwapTokenPrice : event.currentTokenPrice).toFixed(2)}
                       </td>
                       <td>
                         <Image
                           width={60}
+                          height={30}
                           src={event.exchange.logo}
-                          alt={event.exchange.name}
+                          alt={event.exchange.nameKor}
                         />
                       </td>
                     </tr>

@@ -13,5 +13,5 @@ export interface Token {
 }
 
 export type ExchangeType = "binance" | "bithumb";
-export type TokenType = "BTC" | "ETH" | "USDT" | "USDC";
+export type TokenType = "BTC" | "ETH" | "USDT" | "USDC" | "KLAY" | "ARB" | "SOL" | "XRP" | "AVAX";
 export type TransactionType = "deposit" | "withdraw" | "swap";

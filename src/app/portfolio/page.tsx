@@ -1,7 +1,5 @@
 import AssetSection from "./components/AssetSection";
-import PortfolioPieGraph from "./components/AssetSection/PortfolioPieGraph";
 import BalanceFlowSection from "./components/BalanceFlowSection";
-import ProfitLineGraph from "./components/BalanceFlowSection/ProfitLineGraph";
 
 const Portfolio = () => {
   return (
