@@ -4,7 +4,7 @@ import { TOKENS } from "@/modules/constants";
 import { Token } from "@/types/domain";
 import { faker } from "@faker-js/faker";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const dummyTokens = [
   [TOKENS.BTC, TOKENS.USDC],

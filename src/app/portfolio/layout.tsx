@@ -58,15 +58,26 @@ const Layout = ({ children }: PropsWithChildren) => {
     } finally {
       setUpdateAssetLoading(false);
     }
-    setProfileUri(searchParams.get("profile"));
-    setNickname(searchParams.get("nickname"));
+  };
+
+  const checkParams = () => {
+    const profile = searchParams.get("profile");
+    const nickname = searchParams.get("nickname");
+
+    if (profile && nickname) {
+      setProfileUri(profile);
+      setNickname(nickname);
+    }
   };
 
   useEffect(() => {
+    if (id) {
+      checkParams();
+    }
     loadExchangeConnections();
     loadAssets();
     loadAppState();
-  }, []);
+  }, [id]);
 
   return (
     <Suspense fallback={<LayoutFallback />}>

@@ -9,6 +9,7 @@ import { useUserStore } from "@/stores/userStore";
 import { logout } from "@/modules/apis";
 import { DEFAULT_USER_PROFILE_URI } from "@/modules/constants";
 import { useRouter } from "next/navigation";
+import { deleteCookie } from "cookies-next";
 
 const Header = () => {
   const [profile, loadProfile, setProfile] = useUserStore((state) => [
@@ -19,6 +20,7 @@ const Header = () => {
   const router = useRouter();
 
   const onClickLogout = async () => {
+    deleteCookie("SESSION_ID");
     await logout();
     setProfile(null);
     router.push("/");
