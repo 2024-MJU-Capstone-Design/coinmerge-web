@@ -11,32 +11,32 @@ const BalanceFlowSection = () => {
   const [assets] = useUserStore((store) => [store.assets]);
   const tokenPrices = useAppStore((state) => state.tokenPrices);
   const totalProfitRate =
-    Number(assets?.snapshots[assets.snapshots.length - 2].amount) /
-    Number(assets?.snapshots[0].amount);
+    Number(assets?.snapshots[assets.snapshots.length - 2]?.amount) /
+    Number(assets?.snapshots[0]?.amount);
   const thirtyDayProfitRate =
-    Number(assets?.snapshots[0].amount) /
+    Number(assets?.snapshots[0]?.amount) /
     Number(
       assets?.snapshots[
         assets.snapshots.length >= 30 ? 29 : assets.snapshots.length - 1
-      ].amount
+      ]?.amount
     );
   const oneDayProfitRate =
-    Number(assets?.snapshots[assets.snapshots.length - 1].amount) /
+    Number(assets?.snapshots[assets.snapshots.length - 1]?.amount) /
     Number(
       assets?.snapshots[
         assets.snapshots.length >= 2
           ? assets.snapshots.length - 2
           : assets.snapshots.length - 1
-      ].amount
+      ]?.amount
     );
   const oneDayProfit =
-    Number(assets?.snapshots[assets.snapshots.length - 1].amount) -
+    Number(assets?.snapshots[assets.snapshots.length - 1]?.amount) -
     Number(
       assets?.snapshots[
         assets.snapshots.length >= 2
           ? assets.snapshots.length - 2
           : assets.snapshots.length - 1
-      ].amount
+      ]?.amount
     );
 
   const totalBithumbValue = BITHUMB_DUMMY_DATA.reduce((acc, cur) => {
@@ -58,7 +58,7 @@ const BalanceFlowSection = () => {
             $
             <CountUp
               decimals={2}
-              end={Number(assets?.snapshots[0].amount ?? 0) + totalBithumbValue}
+              end={Number(assets?.snapshots[0]?.amount ?? 0) + totalBithumbValue}
             />
           </p>
           <pre

@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import GlobalModal from "./components/GlobalModal";
 import Header from "./components/header";
 import Footer from "./components/footer";
+import { cookies } from "next/headers";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
@@ -22,6 +23,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookie = cookies();
+  console.log(cookie);
   return (
     <html lang="en">
       <body className={`${pretendard.className}`}>

@@ -1,8 +1,9 @@
-import { signIn } from "@/modules/apis";
+import { getProfile, signIn } from "@/modules/apis";
 import { IError } from "@/modules/globalErrorHandler";
 import { useUserStore } from "@/stores/userStore";
 import { SignInRequest } from "@/types/api";
 import { FormActionState } from "@/types/custom";
+import { setCookie } from "cookies-next";
 
 export const signInFormAction = async (
   prevState: FormActionState<SignInRequest>,
@@ -17,7 +18,11 @@ export const signInFormAction = async (
       password,
     });
 
-    useUserStore.getState().setProfile(result);
+    setCookie("SESSION_ID", result.id);
+
+    const profile = await getProfile();
+
+    useUserStore.getState().setProfile(profile);
 
     return {
       data: {

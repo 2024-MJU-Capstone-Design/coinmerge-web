@@ -3,10 +3,10 @@ import dynamic from 'next/dynamic';
 
 import {Fade} from "react-awesome-reveal";
 import coinAnimation from "../assets/lotties/coins.json";
+import { cookies } from 'next/headers';
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 const Home = () => {
-
   return (
     <div className="h-[calc(100vh-69px)] flex flex-col justify-between py-24">
       <section className="flex items-end justify-between overflow-visible">

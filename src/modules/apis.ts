@@ -9,6 +9,7 @@ import {
   Profile,
   ProfileUpdateRequest,
   SignInRequest,
+  SignInResponse,
   SignUpRequest,
   Token,
   TotalAssetHistoryResponse,
@@ -59,7 +60,7 @@ export async function signUp(data: SignUpRequest) {
 
 export async function signIn(data: SignInRequest) {
   try {
-    const result = await baseFetch<Profile>("login", {
+    const result = await baseFetch<SignInResponse>("login", {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -107,6 +108,7 @@ export async function checkAuth(cookie: string) {
 
     return result;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }

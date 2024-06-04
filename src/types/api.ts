@@ -13,6 +13,10 @@ export type SignInRequest = {
   password: string;
 };
 
+export type SignInResponse = {
+  id: string;
+}
+
 export type ProfileUpdateRequest = {
   password: string;
   nickname: string;
