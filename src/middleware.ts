@@ -8,15 +8,18 @@ export async function middleware(request: NextRequest) {
   const { nextUrl, cookies } = request;
   const url = nextUrl.clone();
   const sessionCookie = cookies.get("JSESSIONID");
-  const { validUser } = await checkAuth(
-    `${sessionCookie?.name}=${sessionCookie?.value}`
-  );
-  const requestHeaders = new Headers(request.headers);
+  
+  let isAuthenticated = false;
+  if(sessionCookie) {
+    const { validUser } = await checkAuth(
+      `${sessionCookie?.name}=${sessionCookie?.value}`
+    );
 
-  requestHeaders.set("Content-Security-Policy", "upgrade-insecure-requests");
+    isAuthenticated = validUser;
+  }
 
   if (AUTH_PAGES.some((page) => nextUrl.pathname.startsWith(page))) {
-    if (!validUser) {
+    if (!isAuthenticated) {
       url.pathname = "/signin";
       return NextResponse.redirect(new URL("/signin", request.url));
     } else {

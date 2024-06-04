@@ -26,7 +26,7 @@ async function baseFetch<T>(path: string, request?: RequestInit): Promise<T> {
         ...request?.headers,
       },
       ...request,
-    });
+  });
 
     const resultJson = await result.json();
 
@@ -40,7 +40,6 @@ async function baseFetch<T>(path: string, request?: RequestInit): Promise<T> {
     return resultJson;
   } catch (error: unknown) {
     globalErrorHandler(error as IError);
-    console.log(error);
     throw error;
   }
 }
