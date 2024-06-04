@@ -88,7 +88,6 @@ export const GLOBAL_ERROR_MESSAGE = {
 }
 
 export const DEFAULT_USER_PROFILE_URI = "https://coinmerge.s3.ap-northeast-2.amazonaws.com/default-avatar.png";
-export const API_BASE_URL = "http://ec2-13-124-254-8.ap-northeast-2.compute.amazonaws.com";
-export const APP_BASE_URL = "http://localhost:3000";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 export const GET_PRICE_TOKENS = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT", "KLAYUSDT", "AVAXUSDT", "ARBUSDT"];
