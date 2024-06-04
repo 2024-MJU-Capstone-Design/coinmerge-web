@@ -1,6 +1,3 @@
-import { useModalStore } from "@/stores/modalStore";
-import { APP_BASE_URL } from "./constants";
-
 export interface IError {
   statusCode: number;
   code: string;
