@@ -6,6 +6,7 @@ import GlobalModal from "./components/GlobalModal";
 import Header from "./components/header";
 import Footer from "./components/footer";
 import { cookies } from "next/headers";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
@@ -28,12 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretendard.className}`}>
-          <Header />
-          <div className="max-w-[1400px] min-h-[calc(100vh-69px)] w-full m-auto">
-            {children}
-          </div>
-          <Footer />
-          <GlobalModal />
+        <Header />
+        <div className="max-w-[1400px] min-h-[calc(100vh-69px)] w-full m-auto">
+          {children}
+        </div>
+        <Footer />
+        <GlobalModal />
+        <SpeedInsights/>
       </body>
     </html>
   );
